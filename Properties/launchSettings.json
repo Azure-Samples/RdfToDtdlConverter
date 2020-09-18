@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "RdfToDtdlConverter": {
+      "commandName": "Project",
+      "commandLineArgs": "--rdf-file ifc.ttl --dtdl-file ifc.json --dtmi-prefix com:example --model-version 2"
+    }
+  }
+}
