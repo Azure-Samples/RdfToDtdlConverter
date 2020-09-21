@@ -10,7 +10,7 @@ using System.Linq;
 using Microsoft.Azure.DigitalTwins.Parser;
 using System.Text.RegularExpressions;
 using Newtonsoft.Json;
-
+using AngleSharp.Dom;
 
 namespace RdfToDtdlConverter
 {
@@ -349,44 +349,49 @@ namespace RdfToDtdlConverter
         private static string GenerateDTMI(OntologyResource resource)
         {
 
-            string id;
+            string id = null;
 
             try
             {
-                // Ignore any autos
-                if (resource.ToString().Contains("_:autos"))
-                {
 
-                    return null;
+                string nodeType = resource.Resource.NodeType.ToString();
+
+                if (nodeType == "Uri")
+                {
+                    //Get the IRI
+                    id = resource.Resource.ToString();
+                
+                    // Find the suffix after the # in the IRI
+                    if (id.Contains("#"))
+                    {
+
+                        int index = id.LastIndexOf("#");
+                        id = id.Substring(index + 1);
+
+                    }
+                    else  // Or find the suffix after the last / in the IRI
+                    {
+
+                        int index = id.LastIndexOf("/");
+                        id = id.Substring(index + 1);
+
+                    }
+
+                    id = $"dtmi:{_dtmiPrefix}:{id};{_modelVersion}";
+
+                    // Check to ensure id is <= 128 characters
+                    if (id.Count() > 128)
+                    {
+
+                        throw new System.Exception($"{id} is > 128 characters.");
+
+                    }
 
                 }
-
-                // Find the suffix after the # in the IRI
-                if (resource.ToString().Contains("#"))
+                else
                 {
 
-                    int index = resource.ToString().LastIndexOf("#");
-                    id = resource.ToString().Substring(index + 1);
-
-                }
-                else  // Find the suffix after the last / in the IRI
-                {
-
-                    int index = resource.ToString().LastIndexOf("/");
-                    id = resource.ToString().Substring(index + 1);
-
-                }
-
-                // Remove spaces, if any
-                //id = Regex.Replace(id, @"\s+", String.Empty);
-
-                id = $"dtmi:{_dtmiPrefix}:{id};{_modelVersion}";
-
-                // Check to ensure id is <= 128 characters
-                if(id.Count() > 128)
-                {
-
-                    throw new System.Exception($"{id} is > 128 characters.");
+                    // Console.WriteLine($"Not a URI -> {resource.ToString()}");
 
                 }
 
