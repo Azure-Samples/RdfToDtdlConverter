@@ -2,7 +2,7 @@
   "profiles": {
     "RdfToDtdlConverter": {
       "commandName": "Project",
-      "commandLineArgs": "--rdf-file ifc.ttl --dtdl-file ifc.json --dtmi-prefix com:example --model-version 2"
+      "commandLineArgs": "--rdf-file Pizza.ttl --dtdl-file Pizza.json --dtmi-prefix com:example --model-version 2"
     }
   }
 }
