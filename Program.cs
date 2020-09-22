@@ -169,7 +169,7 @@ namespace RdfToDtdlConverter
                     if (!String.IsNullOrEmpty(Id))
                     {
 
-                        Console.WriteLine($"{owlClass.ToString()} -> {Id}");
+                        Console.WriteLine($"{owlClass.Resource.ToString()} -> {Id}");
 
                         // Create Interface
                         DtdlInterface dtdlInterface = new DtdlInterface
@@ -309,8 +309,6 @@ namespace RdfToDtdlConverter
 
                 IReadOnlyDictionary<Dtmi, DTEntityInfo> parseTask = modelParser.ParseAsync(modelJson).GetAwaiter().GetResult();
 
-                Console.WriteLine($"Validation complete!");
-
             }
             catch (ParsingException pe)
             {
@@ -339,6 +337,8 @@ namespace RdfToDtdlConverter
 
             }
 
+            Console.WriteLine($"Validation complete!");
+
         }
 
         /// <summary>
@@ -360,8 +360,8 @@ namespace RdfToDtdlConverter
                 {
                     //Get the IRI
                     id = resource.Resource.ToString();
-                
-                    // Find the suffix after the # in the IRI
+
+                    // Find the suffix after the # in the IRI when pattern is https://brickschema.org/schema/1.1/Brick#Equipment
                     if (id.Contains("#"))
                     {
 
@@ -369,7 +369,7 @@ namespace RdfToDtdlConverter
                         id = id.Substring(index + 1);
 
                     }
-                    else  // Or find the suffix after the last / in the IRI
+                    else  // Or find the suffix after the last / in the IRI when pattern is http://webprotege.stanford.edu/Pizza
                     {
 
                         int index = id.LastIndexOf("/");
