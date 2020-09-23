@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 
 namespace RdfToDtdlConverter.Models
 {
+
     public class DtdlContents
     {
         [JsonProperty("@type")]
@@ -45,13 +46,14 @@ namespace RdfToDtdlConverter.Models
         public string Type { get; set; }
         
         [JsonProperty("contents", NullValueHandling = NullValueHandling.Ignore)]
-        public IList<DtdlContents> Contents { get; set; }
+        public List<DtdlContents> Contents { get; set; }
 
         [JsonProperty("@context")]
         public string Context { get; set; }
         
         [JsonProperty("extends", NullValueHandling = NullValueHandling.Ignore)]
-        public string Extends { get; set; }
+        //public string Extends { get; set; }
+        public List<string> Extends { get; set; }
 
         [JsonProperty("displayName", NullValueHandling = NullValueHandling.Ignore)]
         public string DisplayName { get; set; }

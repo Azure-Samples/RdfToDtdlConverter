@@ -187,14 +187,28 @@ namespace RdfToDtdlConverter
                         if (foundSuperClasses.Any())
                         {
 
-                            string superClassId = GenerateDTMI(foundSuperClasses.First());
+                            List<string> extendsList = new List<string>();
 
-                            if (!String.IsNullOrEmpty(superClassId))
+                            int extendsMax = 0;
+
+                            foreach (var superClass in foundSuperClasses)
                             {
 
-                                dtdlInterface.Extends = superClassId;
+                                // DTDL v2 allows for a maximum of 2 extends. We ignore the other super classes
+                                if(extendsMax < 2)
+                                {
+
+                                    string superClassId = GenerateDTMI(superClass);
+
+                                    extendsList.Add(superClassId);
+
+                                    extendsMax++;
+
+                                }
 
                             }
+
+                            dtdlInterface.Extends = extendsList;
 
                         }
 

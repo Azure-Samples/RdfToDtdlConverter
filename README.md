@@ -11,7 +11,7 @@ This sample accompanies the *How to design and convert models* article.
 * Conversion of RDF-based ontology files (Turtle, RDF/XML, etc.) to JSON-LD-based DTDL v2.
 * Customizable DTMI prefix
 * DTDL validation using ```Microsoft.Azure.DigitalTwins.Parser```
-* Easily extensible
+* Simple, extensible
 
 ## Usage
 
