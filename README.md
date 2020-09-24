@@ -1,3 +1,14 @@
+---
+page_type: sample
+languages:
+- csharp
+products:
+- azure-digital-twins
+name: RdfToDtdlConverter sample application to convert RDF to DTDL
+description: .NET Core command-line application that translates an RDF-based ontology to JSON-LD-based Digital Twins Definition Language (DTDL)
+urlFragment: digital-twins-model-conversion-samples
+---
+
 # RdfToDtdlConverter
 
 **RdfToDtdlConverter** is a .NET Core command-line application that translates an RDF-based ontology to JSON-LD-based [Digital Twins Definition Language (DTDL) version 2](https://github.com/Azure/opendigitaltwins-dtdl/blob/master/DTDL/v2/dtdlv2.md) for use by the [Azure Digital Twins](https://docs.microsoft.com/azure/digital-twins/overview) service. 
