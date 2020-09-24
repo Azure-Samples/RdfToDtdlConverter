@@ -64,7 +64,7 @@ The RdfToDtdlConverter maps OWL/RDFS constructs to DTDL v2 constructs according 
 |                     | rdfs:comment         |                      | comment                            |
 |                     | rdfs:label           |                      | displayName                        |
 
-Depending on the model, you may need to modify the code and mappings. For example, some industry models uses ```skos:definition``` rather than ```rdfs:comment```.
+Depending on the model, you may need to modify the code and mappings. For example, some industry models use ```skos:definition``` rather than ```rdfs:comment```.
 
 For DTDL ```Property```, the following primitive [schema](https://github.com/Azure/opendigitaltwins-dtdl/blob/master/DTDL/v2/dtdlv2.md#schemas) mappings have been implemented:
 ```
@@ -91,9 +91,8 @@ _map.Add("http://www.w3.org/2001/XMLSchema#time", "time");
   - ```No DtmiResolver provided to resolve requisite reference(s): dtmi:...```
   - You can add these Interfaces manually to the JSON output file. 
 - owl:DisjointWith we assume all owl:Classes are disjoint, even if owl:disjointWith is omitted. 
-  - If your OWL classes are not disjoint, meaning a twin is an instance of two OWL classes, you can modify the code to use DTDL’s ```extends``` property to create an Interface that inherits from two other DTDL Interfaces.
+  - In DTDL v2, a twin instance can only be created from a single DTDL interface.
+  - As a work around, you can use TDL’s ```extends``` property to create another Interface that inherits from two other DTDL Interfaces, and create your twin instance from it.
 - owl:ObjectProperty + owl:Domain + owl:Range are required to create a DTDL Relationship. 
   - If no owl:Range, we omit ```target```, which means the target can be any interface. 
   - If no owl:Domain, the DTDL relationship is not created. 
-- Duplicate DTMI Ids are possible when converting an ontology that has duplicate class names in the class heirarchy. You may need to implement logic to detect and resolve duplicate Ids, such as including the super class name in the DTMI.
-
