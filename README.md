@@ -11,9 +11,11 @@ urlFragment: digital-twins-model-conversion-samples
 
 # RdfToDtdlConverter
 
-**RdfToDtdlConverter** is a .NET Core command-line application that translates an RDF-based ontology to JSON-LD-based [Digital Twins Definition Language (DTDL) version 2](https://github.com/Azure/opendigitaltwins-dtdl/blob/master/DTDL/v2/dtdlv2.md) for use by the [Azure Digital Twins](https://docs.microsoft.com/azure/digital-twins/overview) service. 
+![License](https://img.shields.io/badge/license-MIT-green.svg) ![.NET Core](https://github.com/Azure-Samples/RdfToDtdlConverter/workflows/.NET%20Core/badge.svg)
 
-This sample accompanies the *How to design and convert models* article.
+**RdfToDtdlConverter** is a .NET Core command-line application that converts an RDF-based ontology to JSON-LD-based [Digital Twins Definition Language (DTDL) version 2](https://github.com/Azure/opendigitaltwins-dtdl/blob/master/DTDL/v2/dtdlv2.md) for use by the [Azure Digital Twins](https://docs.microsoft.com/azure/digital-twins/overview) service. 
+
+This sample accompanies the *How to convert models to DTDL* article.
 
 ## Features
 
@@ -88,7 +90,8 @@ _map.Add("http://www.w3.org/2001/XMLSchema#time", "time");
 - owl:Imports are not imported. The DTDL parser will flag these missing Interfaces during the validation phase with the following message:
   - ```No DtmiResolver provided to resolve requisite reference(s): dtmi:...```
   - You can add these Interfaces manually to the JSON output file. 
-- owl:DisjointWith we assume all owl:Classes are disjoint, even if owl:disjointWith is omitted. However, if your OWL classes are not disjoint, meaning a twin is an instance of two OWL classes, you can modify the code to use DTDL’s extends property to create an Interface that inherits from two other DTDL Interfaces.
+- owl:DisjointWith we assume all owl:Classes are disjoint, even if owl:disjointWith is omitted. 
+  - If your OWL classes are not disjoint, meaning a twin is an instance of two OWL classes, you can modify the code to use DTDL’s ```extends``` property to create an Interface that inherits from two other DTDL Interfaces.
 - owl:ObjectProperty + owl:Domain + owl:Range are required to create a DTDL Relationship. 
   - If no owl:Range, we omit ```target```, which means the target can be any interface. 
   - If no owl:Domain, the DTDL relationship is not created. 
