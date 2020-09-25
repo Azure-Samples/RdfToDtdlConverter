@@ -155,9 +155,9 @@ namespace RdfToDtdlConverter
             try
             {
 
-                FileLoader.Load(_ontologyGraph, rdfFile.FullName);
+                Console.WriteLine("Reading file...");
 
-                Console.WriteLine("Parsing file...");
+                FileLoader.Load(_ontologyGraph, rdfFile.FullName);
 
                 // Start looping through for each owl:Class
                 foreach (OntologyClass owlClass in _ontologyGraph.OwlClasses)
