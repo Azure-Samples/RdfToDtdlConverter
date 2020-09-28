@@ -15,7 +15,9 @@ urlFragment: digital-twins-model-conversion-samples
 
 **RdfToDtdlConverter** is a .NET Core command-line **sample application** that converts an RDF-based ontology to JSON-LD-based [Digital Twins Definition Language (DTDL) version 2](https://github.com/Azure/opendigitaltwins-dtdl/blob/master/DTDL/v2/dtdlv2.md) for use by the [Azure Digital Twins](https://docs.microsoft.com/azure/digital-twins/overview) service. 
 
-This sample application accompanies the ***Converting models to DTDL*** article and demonstrates how to convert an RDF-based model to DTDL.
+This sample application accompanies the [***Converting industry-standard models to DTDL***](https://docs.microsoft.com/en-us/azure/digital-twins/concepts-convert-models) article and demonstrates how to convert an RDF-based model. 
+
+It includes a sample Pizza (Turtle) model ([WebVOWL](http://www.visualdataweb.de/webvowl/#iri=https://raw.githubusercontent.com/Azure-Samples/RdfToDtdlConverter/main/Pizza.ttl)) which is used to demonstrate the conversion process. You can use this sample to see the conversion patterns in context, and to have as a building block for your own applications performing model conversions according to your own specific needs.
 
 ## Features
 
@@ -24,6 +26,7 @@ This sample application accompanies the ***Converting models to DTDL*** article 
 * Conversion of RDF-based ontology files (Turtle, RDF/XML, etc.) to JSON-LD-based DTDL v2.
 * Customizable DTMI prefix
 * DTDL validation using ```Microsoft.Azure.DigitalTwins.Parser```
+* A sample model (Pizza.ttl) and its converted DTDL model (Pizza.json)
 * Simple, extensible
 
 ## Usage
