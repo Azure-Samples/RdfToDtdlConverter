@@ -200,9 +200,14 @@ namespace RdfToDtdlConverter
 
                                     string superClassId = GenerateDTMI(superClass);
 
-                                    extendsList.Add(superClassId);
+                                    if(superClassId != null)
+                                    {
 
-                                    extendsMax++;
+                                        extendsList.Add(superClassId);
+
+                                        extendsMax++;
+
+                                    }
 
                                 }
 
@@ -476,6 +481,17 @@ namespace RdfToDtdlConverter
 
                 // Use the first rdfs:comment on the owl:Class for the DTDL Interface comment
                 comment = resource.Comment.First().ToString();
+
+                int MAX_COMMENT_LENGTH = 512;
+
+                // Trim large comments. 
+                if(comment.Length > MAX_COMMENT_LENGTH)
+                {
+
+                    // Remove any characters beyond the maximum length.
+                    comment = comment.Substring(0, MAX_COMMENT_LENGTH);
+
+                }
 
             }
             catch (Exception e)
