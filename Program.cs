@@ -310,6 +310,11 @@ namespace RdfToDtdlConverter
 
                 }
 
+                if(_interfaceList.Count == 0)
+                {
+                    throw new Exception("No OWL:Classes found.");
+                }
+
                 // Serialize to JSON
                 var json = JsonConvert.SerializeObject(_interfaceList);
 
@@ -356,7 +361,7 @@ namespace RdfToDtdlConverter
 
             }
 
-            Console.WriteLine($"Validation complete!");
+            Console.WriteLine($"Finished!");
 
         }
 
