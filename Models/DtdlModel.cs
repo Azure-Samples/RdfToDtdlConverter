@@ -23,6 +23,9 @@ namespace RdfToDtdlConverter.Models
 
         [JsonProperty("schema", NullValueHandling = NullValueHandling.Ignore)]
         public string Schema { get; set; }
+
+        [JsonProperty("writable", NullValueHandling = NullValueHandling.Ignore, DefaultValueHandling= DefaultValueHandling.Ignore)]
+        public bool Writable { get; set; }
     }
 
     public class DtdlInterface
