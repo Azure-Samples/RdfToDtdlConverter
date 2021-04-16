@@ -225,6 +225,7 @@ namespace RdfToDtdlConverter
                         foreach (var property in properties)
                         {
 
+                            // An owl:ObjectProperty is used to create a DTDL relationship.
                             if (property.Types.First().ToString() == "http://www.w3.org/2002/07/owl#ObjectProperty")
                             {
 
@@ -247,7 +248,7 @@ namespace RdfToDtdlConverter
                                 // Create relationship
                                 DtdlContents dtdlRelationship = new DtdlContents
                                 {
-                                    Name = property.ToString(),
+                                    Name = Trim(property.ToString()),
                                     Type = "Relationship",
                                     DisplayName = GetRelationshipDisplayName(property),
                                     Comment = GetRelationshipComment(property)
@@ -280,6 +281,7 @@ namespace RdfToDtdlConverter
 
                             }
 
+                            // An owl:DatatypeProperty is used to create a DTDL property.
                             if (property.Types.First().ToString() == "http://www.w3.org/2002/07/owl#DatatypeProperty")
                             {
 
@@ -288,9 +290,33 @@ namespace RdfToDtdlConverter
                                 // Create property
                                 DtdlContents dtdlProperty = new DtdlContents
                                 {
-                                    Name = property.ToString(),
+                                    Name = Trim(property.ToString()),
                                     Type = "Property",
-                                    Schema = _map[property.Ranges.FirstOrDefault().ToString()]
+                                    Schema = _map[property.Ranges.FirstOrDefault().ToString()],
+                                    Comment = GetPropertyComment(property),
+                                    Writable = true
+                                };
+
+                                // Add the Property to the Interface
+                                dtdlInterface.Contents.Add(dtdlProperty);
+
+                            }
+
+                            // An owl:AnnotationProperty is used to create a DTDL property.
+                            if (property.Types.First().ToString() == "http://www.w3.org/2002/07/owl#AnnotationProperty")
+                            {
+
+                                Console.WriteLine($"  Found property: {property}");
+
+                                // Create property
+                                DtdlContents dtdlProperty = new DtdlContents
+                                {
+                                    Name = Trim(property.ToString()),
+                                    Type = "Property",
+                                    // TODO: Lookup actual data type and create complex DTDL schema or map to DTDL semantic type
+                                    Schema = "float",
+                                    Comment = GetPropertyComment(property),
+                                    Writable = true
                                 };
 
                                 // Add the Property to the Interface
@@ -362,6 +388,27 @@ namespace RdfToDtdlConverter
             }
 
             Console.WriteLine($"Finished!");
+
+        }
+
+        private static string Trim(string s)
+        {
+
+            // Look for @ and remove it and anything after
+            int index = s.IndexOf("@");
+            if(index != -1)
+            {
+                s = s.Remove(index);
+            }
+
+            // Look for ^^ and remove it and anything after
+            index = s.IndexOf("^^");
+            if (index != -1)
+            {
+                s = s.Remove(index);
+            }
+
+            return s;
 
         }
 
@@ -448,6 +495,7 @@ namespace RdfToDtdlConverter
 
                 // Use the first rdfs:label on the owl:Class for the DTDL Interface displayName
                 displayName = resource.Label.First().ToString();
+                displayName = Trim(displayName);
 
                 // DTDL displayName limited to 64 characters
                 if (displayName.Length > 64)
@@ -486,6 +534,7 @@ namespace RdfToDtdlConverter
 
                 // Use the first rdfs:comment on the owl:Class for the DTDL Interface comment
                 comment = resource.Comment.First().ToString();
+                comment = Trim(comment);
 
                 int MAX_COMMENT_LENGTH = 512;
 
@@ -527,6 +576,7 @@ namespace RdfToDtdlConverter
 
                 // Use the first rdfs:label on the ObjectProperty for the DTDL relationship displayName
                 displayName = relationship.Label.First().ToString();
+                displayName = Trim(displayName);
 
             }
             catch (Exception e)
@@ -557,6 +607,53 @@ namespace RdfToDtdlConverter
 
                 // Use the first rdfs:comment on the ObjectProperty for the DTDL relationship comment
                 comment = relationship.Comment.First().ToString();
+                comment = Trim(comment);
+
+                int MAX_COMMENT_LENGTH = 512;
+
+                // Trim large comments. 
+                if (comment.Length > MAX_COMMENT_LENGTH)
+                {
+
+                    // Remove any characters beyond the maximum length.
+                    comment = comment.Substring(0, MAX_COMMENT_LENGTH);
+
+                }
+
+            }
+            catch (Exception e)
+            {
+                //Console.WriteLine($"Missing rdfs:comment on {relationship.ToString()}");
+                //Console.WriteLine($"{e.Message}");
+                comment = null;
+            }
+
+            return comment;
+
+        }
+
+        private static string GetPropertyComment(OntologyProperty property)
+        {
+
+            string comment;
+
+            try
+            {
+
+                // Use the first rdfs:comment on the ObjectProperty for the DTDL relationship comment
+                comment = property.Comment.First().ToString();
+                comment = Trim(comment);
+
+                int MAX_COMMENT_LENGTH = 512;
+
+                // Trim large comments. 
+                if (comment.Length > MAX_COMMENT_LENGTH)
+                {
+
+                    // Remove any characters beyond the maximum length.
+                    comment = comment.Substring(0, MAX_COMMENT_LENGTH);
+
+                }
 
             }
             catch (Exception e)
