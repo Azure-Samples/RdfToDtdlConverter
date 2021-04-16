@@ -61,6 +61,12 @@ The RdfToDtdlConverter maps OWL/RDFS constructs to DTDL v2 constructs according 
 |                     | rdfs:label or INode  |                      | name                               |
 |                     | rdfs:label           |                      | displayName                        |
 |                     | rdfs:range           |                      | schema                             |
+|                     | rdfs:comment         |                      | comment                            |
+| Annotation Properties | owl:AnnotationProperty | Interface Properties | @type:Property                     |
+|                     | rdfs:label or INode  |                      | name                               |
+|                     | rdfs:label           |                      | displayName                        |
+|                     | rdfs:range           |                      | schema                             |
+|                     | rdfs:comment         |                      | comment                            |
 | Object Properties   | owl:ObjectProperty   | Relationship         | @type:Relationship                 |
 |                     | rdfs:label or INode  |                      | name                               |
 |                     | rdfs:range           |                      | target or omitted if no rdfs:range |
@@ -85,7 +91,7 @@ _map.Add("http://www.w3.org/2001/XMLSchema#time", "time");
 ```
 
 ### Other Implementation Details
-- owl:AnnotationProperty -> DTDL not implemented.
+- By default, all DTDL properties have their ```writable``` property set to ```true```
 - owl:Restriction -> DTDL not implemented.
 - owl:? -> DTDL Telemetry not implemented.
 - owl:? -> DTDL Command not implemented.
