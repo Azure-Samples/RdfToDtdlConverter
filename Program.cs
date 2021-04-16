@@ -178,6 +178,7 @@ namespace RdfToDtdlConverter
                             Type = "Interface",
                             DisplayName = GetInterfaceDisplayName(owlClass),
                             Comment = GetInterfaceComment(owlClass),
+                            Description = "",
                             Contents = new List<DtdlContents>()
                         };
 
