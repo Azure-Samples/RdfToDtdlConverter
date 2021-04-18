@@ -252,7 +252,7 @@ namespace RdfToDtdlConverter
                                     Name = Trim(property.ToString()),
                                     Type = "Relationship",
                                     DisplayName = GetRelationshipDisplayName(property),
-                                    Comment = GetRelationshipComment(property)
+                                    Comment = GetComment(property)
                                 };
 
                                 // DTDL only supports a single target Id.
@@ -294,7 +294,7 @@ namespace RdfToDtdlConverter
                                     Name = Trim(property.ToString()),
                                     Type = "Property",
                                     Schema = _map[property.Ranges.FirstOrDefault().ToString()],
-                                    Comment = GetPropertyComment(property),
+                                    Comment = GetComment(property),
                                     Writable = true
                                 };
 
@@ -316,7 +316,7 @@ namespace RdfToDtdlConverter
                                     Type = "Property",
                                     // TODO: Lookup actual data type and create complex DTDL schema or map to DTDL semantic type
                                     Schema = "float",
-                                    Comment = GetPropertyComment(property),
+                                    Comment = GetComment(property),
                                     Writable = true
                                 };
 
@@ -392,6 +392,11 @@ namespace RdfToDtdlConverter
 
         }
 
+        /// <summary>
+        /// Removes string data after the @ or ^^
+        /// </summary>
+        /// <param name="s"></param>
+        /// <returns>Substring</returns>
         private static string Trim(string s)
         {
 
@@ -594,11 +599,11 @@ namespace RdfToDtdlConverter
         }
 
         /// <summary>
-        /// Get a comment for a Relationship
+        /// Get the comment on a property
         /// </summary>
         /// <param name="relationship"></param>
         /// <returns>Comment string</returns>
-        private static string GetRelationshipComment(OntologyProperty relationship)
+        private static string GetComment(OntologyProperty property)
         {
 
             string comment;
@@ -606,42 +611,6 @@ namespace RdfToDtdlConverter
             try
             {
 
-                // Use the first rdfs:comment on the ObjectProperty for the DTDL relationship comment
-                comment = relationship.Comment.First().ToString();
-                comment = Trim(comment);
-
-                int MAX_COMMENT_LENGTH = 512;
-
-                // Trim large comments. 
-                if (comment.Length > MAX_COMMENT_LENGTH)
-                {
-
-                    // Remove any characters beyond the maximum length.
-                    comment = comment.Substring(0, MAX_COMMENT_LENGTH);
-
-                }
-
-            }
-            catch (Exception e)
-            {
-                //Console.WriteLine($"Missing rdfs:comment on {relationship.ToString()}");
-                //Console.WriteLine($"{e.Message}");
-                comment = null;
-            }
-
-            return comment;
-
-        }
-
-        private static string GetPropertyComment(OntologyProperty property)
-        {
-
-            string comment;
-
-            try
-            {
-
-                // Use the first rdfs:comment on the ObjectProperty for the DTDL relationship comment
                 comment = property.Comment.First().ToString();
                 comment = Trim(comment);
 
