@@ -1,0 +1,242 @@
+@prefix : <http://www.semanticweb.org/mihf/ontologies/2022/10/untitled-ontology-5#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix semex: <http://www.semanticexample.org/mihf/ontologies/2022/10/ontology-definitions#> .
+@base <http://www.semanticexample.org/mihf/ontologies/2022/10/ontology-definitions#> .
+
+<http://www.semanticexample.org/mihf/ontologies/2022/10/ontology-definitions#> rdf:type owl:Ontology .
+
+#################################################################
+#    Annotation properties
+#################################################################
+
+###  http://www.semanticexample.org/mihf/ontologies/2022/10/ontology-definitions#FullName
+semex:FullName rdf:type owl:AnnotationProperty ;
+               rdfs:label "Full name"^^xsd:string ;
+               rdfs:subPropertyOf rdfs:label .
+
+
+#################################################################
+#    Object Properties
+#################################################################
+
+###  http://www.semanticexample.org/mihf/ontologies/2022/10/ontology-definitions#CitizenOf
+semex:CitizenOf rdf:type owl:ObjectProperty ,
+                         owl:AsymmetricProperty ;
+                rdfs:domain semex:Human ;
+                rdfs:range semex:Country ;
+                rdfs:label "citizen of"@en .
+
+
+###  http://www.semanticexample.org/mihf/ontologies/2022/10/ontology-definitions#hasEmployee
+semex:hasEmployee rdf:type owl:ObjectProperty ;
+                  owl:inverseOf semex:worksAt ;
+                  rdfs:label "has employee" .
+
+
+###  http://www.semanticexample.org/mihf/ontologies/2022/10/ontology-definitions#steer
+semex:steer rdf:type owl:ObjectProperty ;
+            rdfs:label "steer"@en ,
+                       "styre"@no .
+
+
+###  http://www.semanticexample.org/mihf/ontologies/2022/10/ontology-definitions#worksAt
+semex:worksAt rdf:type owl:ObjectProperty ,
+                       owl:AsymmetricProperty ,
+                       owl:IrreflexiveProperty ;
+              rdfs:domain semex:Employee ;
+              rdfs:range semex:Organization ;
+              rdfs:label "jobber for"@no ,
+                         "works at"@en .
+
+
+#################################################################
+#    Data properties
+#################################################################
+
+###  http://www.semanticexample.org/mihf/ontologies/2022/10/ontology-definitions#hasAge
+semex:hasAge rdf:type owl:DatatypeProperty ;
+             owl:equivalentProperty semex:hasAgeInYears .
+
+
+###  http://www.semanticexample.org/mihf/ontologies/2022/10/ontology-definitions#hasAgeInYears
+semex:hasAgeInYears rdf:type owl:DatatypeProperty .
+
+
+###  http://www.semanticexample.org/mihf/ontologies/2022/10/ontology-definitions#hasSocSecNr
+semex:hasSocSecNr rdf:type owl:DatatypeProperty ;
+                  rdfs:domain semex:Human ;
+                  rdfs:label "has Social security number"@en .
+
+
+#################################################################
+#    Classes
+#################################################################
+
+###  http://www.semanticexample.org/mihf/ontologies/2022/10/ontology-definitions#Citizen
+semex:Citizen rdf:type owl:Class ;
+              owl:equivalentClass [ owl:intersectionOf ( semex:Human
+                                                         [ rdf:type owl:Restriction ;
+                                                           owl:onProperty semex:CitizenOf ;
+                                                           owl:minQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                                                           owl:onClass semex:Country
+                                                         ]
+                                                       ) ;
+                                    rdf:type owl:Class
+                                  ] ;
+              rdfs:subClassOf semex:Human .
+
+
+###  http://www.semanticexample.org/mihf/ontologies/2022/10/ontology-definitions#Company
+semex:Company rdf:type owl:Class ;
+              rdfs:subClassOf semex:LegalEntity ;
+              rdfs:comment """A company, abbreviated as co., is a legal entity representing an association of people, whether natural, legal or a mixture of both, with a specific objective. Company members share a common purpose and unite to achieve specific, declared goals. Companies take various forms, such as:
+
+- voluntary associations, which may include nonprofit organizations
+- business entities, whose aim is generating profit
+- financial entities and banks
+- programs or educational institutions"""@en ;
+              rdfs:label "Company"@en ;
+              rdfs:seeAlso "https://en.wikipedia.org/wiki/Company"@en .
+
+
+###  http://www.semanticexample.org/mihf/ontologies/2022/10/ontology-definitions#Country
+semex:Country rdf:type owl:Class ;
+              owl:equivalentClass <https://www.omg.org/spec/LCC/Countries/CountryRepresentation/Country> ;
+              owl:disjointWith semex:Human ;
+              rdfs:label "Country"@en .
+
+
+###  http://www.semanticexample.org/mihf/ontologies/2022/10/ontology-definitions#Employee
+semex:Employee rdf:type owl:Class ;
+               owl:equivalentClass [ rdf:type owl:Restriction ;
+                                     owl:onProperty semex:worksAt ;
+                                     owl:minQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                                     owl:onClass semex:Organization
+                                   ] ;
+               rdfs:subClassOf semex:Human .
+
+
+###  http://www.semanticexample.org/mihf/ontologies/2022/10/ontology-definitions#Government
+semex:Government rdf:type owl:Class ;
+                 rdfs:subClassOf semex:LegalEntity ;
+                 rdfs:label "Government"@en .
+
+
+###  http://www.semanticexample.org/mihf/ontologies/2022/10/ontology-definitions#Human
+semex:Human rdf:type owl:Class ;
+            rdfs:subClassOf [ rdf:type owl:Restriction ;
+                              owl:onProperty semex:hasAge ;
+                              owl:someValuesFrom xsd:integer
+                            ] ,
+                            [ rdf:type owl:Restriction ;
+                              owl:onProperty semex:hasSocSecNr ;
+                              owl:someValuesFrom rdfs:Literal
+                            ] ;
+            owl:disjointWith semex:Organization ;
+            rdfs:comment "Humans are the most abundant and widespread species of primate, characterized by bipedalism and exceptional cognitive skills due to a large and complex brain. This has enabled the development of advanced tools, culture, and language."@en ,
+                         "relating to or characteristic of humankind."@en ;
+            rdfs:label "Human"@en .
+
+[ rdf:type owl:Axiom ;
+   owl:annotatedSource semex:Human ;
+   owl:annotatedProperty rdfs:comment ;
+   owl:annotatedTarget "Humans are the most abundant and widespread species of primate, characterized by bipedalism and exceptional cognitive skills due to a large and complex brain. This has enabled the development of advanced tools, culture, and language."@en ;
+   rdfs:isDefinedBy "https://en.wikipedia.org/wiki/Human"^^xsd:anyURI
+ ] .
+
+
+###  http://www.semanticexample.org/mihf/ontologies/2022/10/ontology-definitions#LegalEntity
+semex:LegalEntity rdf:type owl:Class ;
+                  rdfs:subClassOf semex:Organization ;
+                  rdfs:label "Legal entity"@en .
+
+
+###  http://www.semanticexample.org/mihf/ontologies/2022/10/ontology-definitions#Organization
+semex:Organization rdf:type owl:Class ;
+                   rdfs:comment "An organization is a group of people who work together, like a neighborhood association, a charity, a union, or a corporation. You can use the word organization to refer to group or business, or to the act of forming or establishing something."@en ,
+                                "An organized group of people with a particular purpose, such as a business or government department."@en ;
+                   rdfs:label "Organisasjon"@no ,
+                              "Organization"@en ;
+                   rdfs:seeAlso "https://en.wikipedia.org/wiki/Organization"@en .
+
+[ rdf:type owl:Axiom ;
+   owl:annotatedSource semex:Organization ;
+   owl:annotatedProperty rdfs:comment ;
+   owl:annotatedTarget "An organization is a group of people who work together, like a neighborhood association, a charity, a union, or a corporation. You can use the word organization to refer to group or business, or to the act of forming or establishing something."@en ;
+   rdfs:isDefinedBy "https://www.google.com/url?sa=i&rct=j&q=&esrc=s&source=web&cd=&cad=rja&uact=8&ved=0CAMQw7AJahcKEwioiNWG2q77AhUAAAAAHQAAAAAQAw&url=https%3A%2F%2Fwww.vocabulary.com%2Fdictionary%2Forganization&psig=AOvVaw32vNQ2Y6F0JAEeL-v7h8go&ust=1668550746753385"^^xsd:anyURI
+ ] .
+
+
+###  http://www.semanticexample.org/mihf/ontologies/2022/10/ontology-definitions#employedByEqunior
+semex:employedByEqunior rdf:type owl:Class ;
+                        owl:equivalentClass [ rdf:type owl:Restriction ;
+                                              owl:onProperty semex:worksAt ;
+                                              owl:hasValue :Equinor
+                                            ] ;
+                        rdfs:subClassOf semex:Employee ;
+                        rdfs:label "Employed by Equinor" .
+
+
+###  https://www.omg.org/spec/LCC/Countries/CountryRepresentation/Country
+<https://www.omg.org/spec/LCC/Countries/CountryRepresentation/Country> rdf:type owl:Class .
+
+
+#################################################################
+#    Individuals
+#################################################################
+
+###  http://www.semanticweb.org/mihf/ontologies/2022/10/untitled-ontology-5#Apple
+:Apple rdf:type owl:NamedIndividual ;
+       rdfs:seeAlso "Apple"@en ,
+                    "https://www.apple.com/"@en .
+
+
+###  http://www.semanticweb.org/mihf/ontologies/2022/10/untitled-ontology-5#Equinor
+:Equinor rdf:type owl:NamedIndividual ,
+                  semex:Company ;
+         rdfs:label "Equinor ASA"@en ;
+         rdfs:seeAlso "https://www.equinor.com/"@en .
+
+
+###  http://www.semanticweb.org/mihf/ontologies/2022/10/untitled-ontology-5#Jorn
+:Jorn rdf:type owl:NamedIndividual ,
+               semex:Human ;
+      semex:worksAt :Equinor ;
+      rdfs:label "Jorn"@en ,
+                 "Jørn"@no .
+
+
+###  http://www.semanticweb.org/mihf/ontologies/2022/10/untitled-ontology-5#Lene
+:Lene rdf:type owl:NamedIndividual ,
+               semex:Citizen ,
+               semex:employedByEqunior ;
+      rdfs:label "Lene"@no .
+
+
+###  http://www.semanticweb.org/mihf/ontologies/2022/10/untitled-ontology-5#Mihaly
+:Mihaly rdf:type owl:NamedIndividual ;
+        semex:CitizenOf <https://www.omg.org/spec/LCC/Countries/ISO3166-1-CountryCodes/Norway> ;
+        semex:worksAt :Equinor ;
+        semex:hasAge 53 ;
+        semex:FullName "Mihaly Fekete" ;
+        rdfs:seeAlso "https://www.linkedin.com/in/mihalyfekete/"^^rdfs:Literal .
+
+
+###  http://www.semanticweb.org/mihf/ontologies/2022/10/untitled-ontology-5#TimC
+:TimC rdf:type owl:NamedIndividual ;
+      semex:worksAt :Apple ;
+      semex:FullName "Tim Cook" ;
+      rdfs:label "TimC"^^xsd:string ;
+      rdfs:seeAlso "https://g.co/kgs/SMkxMu"^^xsd:anyURI ,
+                   "https://www.apple.com/leadership/tim-cook/"^^rdfs:Literal .
+
+
+###  https://www.omg.org/spec/LCC/Countries/ISO3166-1-CountryCodes/Norway
+<https://www.omg.org/spec/LCC/Countries/ISO3166-1-CountryCodes/Norway> rdf:type owl:NamedIndividual .
+
+
+###  Generated by the OWL API (version 4.5.9.2019-02-01T07:24:44Z) https://github.com/owlcs/owlapi
